@@ -1,4 +1,4 @@
-f = File.read("input")
+f = File.read("test_input2")
 g = f.split("\r\n")
 
 def get_uniq_group_index(arr, n)
