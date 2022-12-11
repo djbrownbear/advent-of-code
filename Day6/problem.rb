@@ -1,4 +1,4 @@
-f = File.read("test_input2")
+f = File.read("input")
 g = f.split("\r\n")
 
 def get_uniq_group_index(arr, n)
@@ -10,10 +10,10 @@ end
 
 p "PART 1"
 g.each do |line|
-  p "#{get_uniq_group_index(line, 4)} : #{line}"
+  p "#{get_uniq_group_index(line, 4)}"
 end
 
 p "PART 2"
 g.each do |line|
-  p "#{get_uniq_group_index(line, 14)} : #{line}"
+  p "#{get_uniq_group_index(line, 14)}"
 end
