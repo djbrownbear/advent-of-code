@@ -1,7 +1,7 @@
 require "byebug"
 
 class Stacks
-  FILENAME = File.read("test_input")
+  FILENAME = File.read("input")
   DATA = FILENAME.split("\r\n")
 
   
@@ -23,7 +23,9 @@ class Stacks
   end
 
   def add_to_stack(arr)
+    puts "before: #{@stacks}"
     arr.each_with_index { |char, i| @stacks[i + 1] << char }
+    puts "after: #{@stacks}"
   end
 
   def add_indices(arr)
@@ -31,17 +33,11 @@ class Stacks
   end
 
   def move_stacks(quantity, source, dest)
-    debugger
-    quantity.times do 
-     val = @stacks[source].first
-     @stacks[source] = @stacks[source][1..-1]
-     p "moving #{val} from #{source} to #{dest}"
-     begin
-      @stacks[dest].insert(0, val)
-     rescue
-      @stacks[dest] = [val]      
-     end
-    end
+    # debugger
+    puts "#{quantity} #{source} #{dest}"
+    puts "before move: #{@stacks}"
+    quantity.times { stacks[dest].unshift stacks[source].shift }
+    puts "after move: #{@stacks}"
   end
 
   def reverse_stack
@@ -49,26 +45,26 @@ class Stacks
   end
 
   def clean_stack
-    @stacks = @stacks.reject { |k,v| v == " " } 
+    @stacks = @stacks.each do |k,v| 
+      # puts "before clean: #{@stacks}"
+      @stacks[k] = v.reject { |el| el == nil || el == " " || el.match?(/\d/) }
+      # puts "after clean: #{@stacks}"
+    end
   end
 
   def run
     @data.each do |line|
       if line.index("[") || line.index("]")
         add_to_stack(parse_stackline(line))
-      elsif line.scan(/\w/).empty?
-        p line
       elsif line.length == 0
         print "starting instructions...\n"
-        # self.reverse_stack
-        # self.clean_stack
-      else
-        # p line
+      elsif line.index("move") && line.scan(/\d/).count == 3
+        self.clean_stack
         quantity, source, dest = parse_instructions(line)
         move_stacks(quantity, source, dest)
       end 
     end
-    p @stacks
+    p @stacks.values.map(&:first).join
   end
 end
 
